@@ -12,7 +12,7 @@ The challenge is not storage; it’s **turning messy, unstructured data into rel
 
 This project addresses a real 2026 business need:
 
-**“We need an automated, cloud‑native pipeline that ingests raw data, cleans it, transforms it, and makes it queryable; reliably, securely, and at low cost.”**
+**“We need an automated, cloud‑native pipeline that ingests raw data, cleans it, transforms it, and makes it queryable, reliable, secure, and at low cost.”**
 
 The solution uses fully managed AWS services to deliver:
 
