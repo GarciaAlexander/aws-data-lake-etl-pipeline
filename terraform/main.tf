@@ -115,6 +115,26 @@ resource "aws_iam_role_policy_attachment" "step_functions_basic" {
   policy_arn = "arn:aws:iam::aws:policy/AWSStepFunctionsFullAccess"
 }
 
+resource "aws_iam_role_policy" "step_functions_glue_access" {
+  role = aws_iam_role.step_functions_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "glue:StartCrawler",
+          "glue:GetCrawler",
+          "glue:StartJobRun",
+          "glue:GetJobRun"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 ############################################
 # CloudWatch Log Groups
 ############################################
