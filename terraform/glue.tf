@@ -11,8 +11,8 @@ resource "aws_glue_catalog_database" "raw_db" {
 ############################################
 
 resource "aws_glue_crawler" "raw_crawler" {
-  name         = "${var.project_name}-raw-crawler"
-  role         = aws_iam_role.glue_role.arn
+  name          = "${var.project_name}-raw-crawler"
+  role          = aws_iam_role.glue_role.arn
   database_name = aws_glue_catalog_database.raw_db.name
 
   s3_target {

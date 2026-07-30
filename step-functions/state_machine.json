@@ -1,0 +1,22 @@
+{
+  "Comment": "ETL Pipeline Orchestration",
+  "StartAt": "RunCrawler",
+  "States": {
+    "RunCrawler": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:glue:startCrawler",
+      "Parameters": {
+        "Name": "aws-data-lake-etl-raw-crawler"
+      },
+      "Next": "RunETLJob"
+    },
+    "RunETLJob": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName": "aws-data-lake-etl-etl-job"
+      },
+      "End": true
+    }
+  }
+}

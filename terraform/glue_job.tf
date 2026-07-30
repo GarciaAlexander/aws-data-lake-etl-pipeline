@@ -11,7 +11,7 @@ resource "aws_glue_job" "etl_job" {
   glue_version = "4.0"
 
   default_arguments = {
-    "--job-language"                      = "python"
-    "--enable-continuous-cloudwatch-log"  = "true"
+    "--job-language"                     = "python"
+    "--enable-continuous-cloudwatch-log" = "true"
   }
 }

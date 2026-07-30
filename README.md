@@ -94,6 +94,8 @@ All without introducing additional paid tools.
         aws-data-lake-etl-pipeline/
         ├── terraform/
         │   ├── main.tf
+        │   ├── glue_job.tf
+        │   ├── step_functions.tf
         │   ├── variables.tf
         │   ├── outputs.tf
         │   ├── providers.tf
@@ -183,6 +185,80 @@ Ensures reproducible, environment‑agnostic deployments across dev/staging/prod
 
 ### CloudWatch  
 Centralized monitoring for logs, metrics, and alarms.
+
+---
+
+## 🧪 ETL Logic (PySpark)
+
+The ETL job performs:
+
+    * Null normalization
+    * Type casting (amount → float, date → yyyy‑MM‑dd)
+    * Vendor normalization (missing vendors → “Unknown”)
+    * Partitioning by vendor
+    * Writing optimized Parquet to the curated zone
+
+This ensures clean, analytics‑ready data for downstream consumers.
+
+---
+
+## 🌀 Step Functions Orchestration (Execution Walkthrough)
+
+The pipeline is orchestrated using AWS Step Functions.
+The state machine executes:
+
+    1. RunCrawler
+    2. RunETLJob
+    3. CloudWatch Logging
+
+Execution Flow
+
+    * RunCrawler → green
+    * RunETLJob → green
+    * Workflow ends with Execution succeeded
+
+Screenshots recommended:
+
+    * Step Functions graph
+    * Successful execution
+    * ETL job run triggered by Step Functions
+
+---
+
+## ▶️ Running the Pipeline
+
+1. Upload Raw Data
+
+    Upload CSV/JSON files to:
+
+        s3://<project>-raw/
+
+2. Trigger Pipeline
+    Open:
+
+    AWS Step Functions -> State Machines -> aws-data-lake-etl-etl-state-machine
+
+    Click:
+
+    Start execution
+
+3. Monitor Execution
+    Watch transitions:
+
+    * RunCrawler
+    * RunETLJob
+
+4. Verify Curated Output
+
+    Check:
+
+        s3://<project>-curated/vendor_data/
+
+5. Query with Athena
+
+    Use sample queries in:
+
+        athena/queries/sample_queries.sql
 
 ---
 
