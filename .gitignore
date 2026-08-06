@@ -1,5 +1,4 @@
-*.tfstate
-*.tfstate.backup
+*.tfstate*
 .terraform/
 __pycache__/
 *.log

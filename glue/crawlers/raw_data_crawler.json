@@ -1,0 +1,16 @@
+{
+  "Name": "aws-data-lake-etl-raw-crawler",
+  "Role": "aws-data-lake-etl-glue-role",
+  "DatabaseName": "aws-data-lake-etl-raw-db",
+  "Targets": {
+    "S3Targets": [
+      {
+        "Path": "s3://aws-data-lake-etl-raw/"
+      }
+    ]
+  },
+  "SchemaChangePolicy": {
+    "UpdateBehavior": "UPDATE_IN_DATABASE",
+    "DeleteBehavior": "LOG"
+  }
+}

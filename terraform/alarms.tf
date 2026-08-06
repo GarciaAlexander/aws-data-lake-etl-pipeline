@@ -5,7 +5,7 @@ resource "aws_sns_topic" "etl_alerts" {
 resource "aws_sns_topic_subscription" "etl_alerts_email" {
   topic_arn = aws_sns_topic.etl_alerts.arn
   protocol  = "email"
-  endpoint  = "alexg97343@gmail.com"
+  endpoint  = "your-email@example.com"
 }
 
 resource "aws_cloudwatch_metric_alarm" "glue_etl_failure" {

@@ -1,31 +1,28 @@
 # 📘 AWS Data Lake & ETL Pipeline
 
-Cloud‑native data lake and ETL pipeline built with AWS Glue, S3, Athena, Step Functions, EventBridge, CloudWatch, and Terraform.  
-Designed to demonstrate production‑grade data engineering, orchestration, monitoring, and infrastructure‑as‑code practices.
+Enterprise‑grade, cloud‑native data lake and ETL pipeline built on AWS. Designed to solve real business data challenges using scalable ingestion, transformation, orchestration, and analytics; all deployed through Terraform for repeatable, production-ready infrastructure.
 
 ---
 
 ## 🎯 Business Problem
 
-Modern organizations generate large volumes of raw, inconsistent data from vendors, SaaS platforms, internal systems, and customer‑facing applications.  
-The challenge is not storage; it’s **turning messy, unstructured data into reliable, analytics‑ready datasets** without relying on expensive platforms like Snowflake, Databricks, or Informatica.
+Organizations in 2026 face a common challenge: data arrives from multiple vendors, SaaS platforms, and internal systems in inconsistent formats, making analytics slow, unreliable, and expensive. Teams often rely on manual CSV uploads, brittle scripts, or costly third‑party platforms to prepare data for reporting.
 
-This project addresses a real 2026 business need:
+This project solves a real business need:
 
-**“We need an automated, cloud‑native pipeline that ingests raw data, cleans it, transforms it, and makes it queryable, reliable, secure, and at low cost.”**
+**“Automate ingestion, cleaning, transformation, and delivery of analytics‑ready datasets using fully managed AWS services without introducing new licensing costs.”**
 
-The solution uses fully managed AWS services to deliver:
+The solution provides:
 
-- automated ingestion  
-- schema discovery  
-- PySpark‑based transformation  
-- curated, partitioned datasets  
-- SQL analytics  
-- workflow orchestration  
-- monitoring + alerting  
-- infrastructure‑as‑code  
+- automated ingestion and cataloging  
+- PySpark‑based transformation at scale 
+- curated, partitioned datasets optimized for analytics 
+- serverless SQL querying  
+- workflow orchestration with retries and error handling 
+- monitoring and alerting
+- full infrastructure‑as‑code for reproducibility  
 
-All without introducing additional paid tools.
+This is the type of pipeline a modern data engineering team would deploy in production.
 
 ---
 
@@ -78,14 +75,14 @@ All without introducing additional paid tools.
 ## 🧩 Key Features
 
 - Multi‑zone S3 data lake (raw → curated → analytics)  
-- Glue Crawler for automated schema discovery  
-- Glue ETL (PySpark) for cleaning, transformation, and partitioning  
-- Athena for serverless SQL analytics  
-- Step Functions for workflow orchestration and error handling  
-- EventBridge for scheduled pipeline execution  
-- CloudWatch for monitoring, logs, and alarms  
-- Terraform IaC for reproducible deployments  
-- Zero‑cost architecture using AWS Free Tier  
+- Automated schema discovery via Glue Crawler 
+- PySpark ETL job for cleaning, normalization, and partitioning
+- Curated Parquet datasets optimized for Athena
+- Step Functions orchestration with error handling 
+- EventBridge scheduling for automated daily runs
+- CloudWatch logs and alarms for observability
+- Terraform IaC for consistent, environment‑agnostic deployments
+- Cost‑efficient, serverless architecture suitable for production workloads
 
 ---
 
@@ -93,6 +90,11 @@ All without introducing additional paid tools.
 
         aws-data-lake-etl-pipeline/
         ├── terraform/
+        │   ├── alarms.tf
+        │   ├── cloudwatch_metrics.md
+        │   ├── eventbridge.tf
+        │   ├── glue.tf
+        │   ├── scheduler_last.tf
         │   ├── main.tf
         │   ├── glue_job.tf
         │   ├── step_functions.tf
@@ -144,44 +146,44 @@ Vendor or application data lands in the **raw zone** of the S3 data lake.
 Glue Crawler scans raw data and updates the Data Catalog.
 
 ### 3. ETL Transformation (PySpark)  
-Glue ETL job cleans, normalizes, and transforms raw data into curated, partitioned datasets.
+The Glue ETL job performs cleaning, normalization, type casting, and partitioning.
 
 ### 4. Curated Storage  
-Transformed data is written to the **curated zone**, optimized for analytics.
+Transformed data is written to the **curated zone** in optimized Parquet format.
 
 ### 5. Analytics Layer  
 Athena queries curated data using serverless SQL.
 
 ### 6. Orchestration  
-Step Functions coordinates the entire workflow with retries, error handling, and logging.
+Step Functions coordinates the workflow with retries, logging, and state tracking.
 
 ### 7. Monitoring  
-CloudWatch tracks pipeline health, logs, metrics, and alerts.
+CloudWatch provides logs, metrics, alarms, and pipeline health visibility.
 
 ---
 
 ## 🧠 Engineering Decisions (Why This Architecture)
 
 ### S3 Data Lake  
-Flexible, durable, low‑cost storage supporting multi‑zone architecture.
+Durable, scalable, low‑cost storage supporting multi‑zone architecture.
 
 ### Glue Crawler  
 Automates schema discovery and reduces manual catalog management.
 
 ### Glue ETL (PySpark)  
-Industry‑standard transformation engine for scalable, distributed processing.
+Distributed transformation engine suitable for production‑scale workloads.
 
 ### Partitioned Curated Zone  
-Improves query performance and reduces Athena scan costs.
+Improves Athena performance and reduces scan costs.
 
 ### Athena  
-Serverless analytics engine — no cluster management or compute overhead.
+Serverless analytics engine; no cluster management or compute provisioning.
 
 ### Step Functions  
 Provides reliable orchestration, retries, and state management.
 
 ### Terraform  
-Ensures reproducible, environment‑agnostic deployments across dev/staging/prod.
+Ensures reproducible deployments across dev/staging/prod environments.
 
 ### CloudWatch  
 Centralized monitoring for logs, metrics, and alarms.
@@ -198,13 +200,12 @@ The ETL job performs:
     * Partitioning by vendor
     * Writing optimized Parquet to the curated zone
 
-This ensures clean, analytics‑ready data for downstream consumers.
+This produces clean, analytics‑ready datasets for downstream consumers.
 
 ---
 
 ## 🌀 Step Functions Orchestration (Execution Walkthrough)
 
-The pipeline is orchestrated using AWS Step Functions.
 The state machine executes:
 
     1. RunCrawler
@@ -213,15 +214,9 @@ The state machine executes:
 
 Execution Flow
 
-    * RunCrawler → green
-    * RunETLJob → green
-    * Workflow ends with Execution succeeded
-
-Screenshots recommended:
-
-    * Step Functions graph
-    * Successful execution
-    * ETL job run triggered by Step Functions
+    * RunCrawler → success
+    * RunETLJob → success
+    * Workflow ends with “Execution succeeded”
 
 ---
 
@@ -236,7 +231,7 @@ Screenshots recommended:
 2. Trigger Pipeline
     Open:
 
-    AWS Step Functions -> State Machines -> aws-data-lake-etl-etl-state-machine
+    AWS Step Functions -> State Machines -> aws-data-lake-etl-state-machine
 
     Click:
 
@@ -278,15 +273,9 @@ Trigger Step Functions manually or via EventBridge schedule.
 
 ---
 
-## 🔍 Sample Athena Queries
-    SELECT *
-    FROM curated_sales_data
-    WHERE order_date >= DATE '2026-01-01';
----
-
 ## 📊 Monitoring & Observability
 
-- CloudWatch Logs for Glue + Step Functions  
+- CloudWatch Logs for Glue and Step Functions  
 - CloudWatch Metrics for pipeline health  
 - Alarms for ETL failures, missing data, or schema changes  
 
@@ -294,13 +283,12 @@ Trigger Step Functions manually or via EventBridge schedule.
 
 ## 💰 Cost Optimization
 
-This architecture stays **100% free** under AWS Free Tier by:
+This architecture is designed for low‑cost production workloads:
 
-- using small datasets  
-- scanning MBs instead of GBs  
-- running Glue in dev mode  
-- minimizing Step Functions transitions  
-- using serverless analytics  
+- partitioned Parquet reduces Athena scan costs
+- serverless compute eliminates idle charges 
+- Glue dev mode minimizes ETL cost 
+- multi‑zone S3 structure reduces reprocessing overhead 
 
 ---
 
