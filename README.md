@@ -292,6 +292,25 @@ This architecture is designed for low‑cost production workloads:
 
 ---
 
+## 📸 Screenshots
+
+### EventBridge Daily Schedule
+![EventBridge Schedule](docs/screenshots/eventbridge-schedule.png)
+
+### Step Functions Execution Graph
+![Step Functions Execution](docs/screenshots/step-functions-execution.png)
+
+### Glue ETL Job Run History
+![Glue Job Run](docs/screenshots/glue-job-run-history.png)
+
+### Athena Query Results
+![Athena Query](docs/screenshots/athena-query-results.png)
+
+### S3 Data Lake Structure
+![S3 Structure](docs/screenshots/s3-data-lake-structure.png)
+
+---
+
 ## 🔮 Future Enhancements
 
 - Add Redshift or Snowflake integration  
